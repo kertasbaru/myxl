@@ -64,7 +64,7 @@ const purchaseController = {
         item_price: targetData.price,
         product_type: "",
         tax: 0,
-        token_confirmation: targetData.token_confirmation
+        token_confirmation: targetData.token_confirmation || ""
       }];
 
       // Logic Decoy (Setup Awal)
@@ -80,7 +80,7 @@ const purchaseController = {
           item_price: decoyData.price,
           product_type: "",
           tax: 0,
-          token_confirmation: decoyData.token_confirmation
+          token_confirmation: decoyData.token_confirmation || ""
         });
       }
 
@@ -144,7 +144,7 @@ const purchaseController = {
         item_price: targetData.price,
         product_type: "",
         tax: 0,
-        token_confirmation: targetData.token_confirmation
+        token_confirmation: targetData.token_confirmation || ""
       }];
 
       // Logic Decoy (Setup Awal)
@@ -160,7 +160,7 @@ const purchaseController = {
           item_price: decoyData.price,
           product_type: "",
           tax: 0,
-          token_confirmation: decoyData.token_confirmation
+          token_confirmation: decoyData.token_confirmation || ""
         });
       }
 
