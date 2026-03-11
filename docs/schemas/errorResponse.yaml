@@ -1,0 +1,8 @@
+type: object
+properties:
+  success:
+    type: boolean
+    example: false
+  message:
+    type: string
+    example: "400 - Invalid Parameters"

@@ -1,0 +1,171 @@
+openapi: 3.0.3
+info:
+  title: Circle
+  version: 1.1.1
+paths:
+  /circle/status:
+    post:
+      summary: Status Circle
+      description: Informasi status circle
+      tags: [Circle]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './schemas/circle.yaml#/components/schemas/CircleCommonRequest'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: './schemas/successResponse.yaml'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: './schemas/circle.yaml#/components/schemas/CircleStatusData'
+
+  /circle/group:
+    post:
+      summary: Info Group & Anggota
+      description: Informasi group dan anggota circle
+      tags: [Circle]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './schemas/circle.yaml#/components/schemas/CircleCommonRequest'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: './schemas/successResponse.yaml'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: './schemas/circle.yaml#/components/schemas/CircleGroupData'
+
+  /circle/validate:
+    post:
+      summary: Validasi Nomor
+      description: Validasi nomor sebelum invite
+      tags: [Circle]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './schemas/circle.yaml#/components/schemas/CircleActionRequest'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: './schemas/successResponse.yaml'
+
+  /circle/invite:
+    post:
+      summary: Undang Anggota
+      description: Mengirim link undangan ke nomor anggota
+      tags: [Circle]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './schemas/circle.yaml#/components/schemas/CircleActionRequest'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: './schemas/successResponse.yaml'
+
+  /circle/accept:
+    post:
+      summary: Terima Undangan
+      description: Terima undangan otomatis tanpa disetujui oleh anggota
+      tags: [Circle]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './schemas/circle.yaml#/components/schemas/CircleActionRequest'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: './schemas/successResponse.yaml'
+
+  /circle/remove:
+    post:
+      summary: Hapus Anggota
+      description: Hapus nomor dari anggota circle
+      tags: [Circle]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './schemas/circle.yaml#/components/schemas/CircleActionRequest'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: './schemas/successResponse.yaml'
+
+  /circle/bonus:
+    post:
+      summary: Daftar Bonus Circle
+      description: Daftar kuota bonus circle yang dapat di klaim
+      tags: [Circle]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './schemas/circle.yaml#/components/schemas/CircleCommonRequest'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: './schemas/successResponse.yaml'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: './schemas/circle.yaml#/components/schemas/CircleBonusData'
+
+  /circle/redeem-bonus:
+    post:
+      summary: Klaim Bonus
+      description: Klaim kuota bonus circle
+      tags: [Circle]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './schemas/circle.yaml#/components/schemas/CircleCommonRequest'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: './schemas/successResponse.yaml'

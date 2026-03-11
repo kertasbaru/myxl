@@ -1,0 +1,123 @@
+openapi: 3.0.3
+info:
+  title: FamPlan
+  version: 1.1.1
+paths:
+  /famplan/dashboard:
+    post:
+      summary: Detail Akrab
+      description: Informasi akrab dan anggota akrab
+      tags: [FamPlan]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './schemas/famplan.yaml#/components/schemas/FamCommonRequest'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: './schemas/successResponse.yaml'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: './schemas/famplan.yaml#/components/schemas/FamDashboardData'
+
+  /famplan/validate:
+    post:
+      summary: Validasi Nomor
+      description: Validasi nomor sebelum ditambahkan
+      tags: [FamPlan]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './schemas/famplan.yaml#/components/schemas/FamActionRequest'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: './schemas/successResponse.yaml'
+  
+  /famplan/member-details:
+    post:
+      summary: Detail Nomor Anggota
+      description: Informasi anggota akrab berdasarkan nomor
+      tags: [FamPlan]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './schemas/famplan.yaml#/components/schemas/FamActionRequest'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: './schemas/successResponse.yaml'
+  
+  /famplan/remove:
+    post:
+      summary: Hapus Anggota
+      description: Hapus anggota dari paket akrab
+      tags: [FamPlan]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './schemas/famplan.yaml#/components/schemas/FamActionRequest'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: './schemas/successResponse.yaml'
+  
+  /famplan/add-member:
+    post:
+      summary: Tambah Anggota
+      description: Menambahkan nomor menjadi anggota akrab
+      tags: [FamPlan]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './schemas/famplan.yaml#/components/schemas/FamAddRequest'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: './schemas/successResponse.yaml'
+
+  /famplan/set-quota:
+    post:
+      summary: Atur Kuota Anggota
+      description: Mengatur limit pemakaian kuota bersama
+      tags: [FamPlan]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './schemas/famplan.yaml#/components/schemas/FamQuotaRequest'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: './schemas/successResponse.yaml'

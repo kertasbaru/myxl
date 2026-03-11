@@ -1,0 +1,57 @@
+components:
+  schemas:
+    # --- Request Bodies ---
+    StoreFamilyRequest:
+      type: object
+      required: [msisdn, family_code]
+      properties:
+        msisdn: { type: string }
+        family_code: { type: string }
+
+    StorePackageRequest:
+      type: object
+      required: [msisdn, option_code]
+      properties:
+        msisdn: { type: string }
+        option_code: { type: string }
+
+    StoreDetailRequest:
+      type: object
+      required: [msisdn, family_code, variant_code, order]
+      properties:
+        msisdn: { type: string }
+        family_code: { type: string }
+        variant_code: { type: string }
+        order: { type: integer }
+
+    # --- Response Models ---
+    StoreFamilyData:
+      type: object
+      properties:
+        family_name: { type: string }
+        family_code: { type: string }
+        variants:
+          type: array
+          items:
+            type: object
+            properties:
+              variant_name: { type: string }
+              variant_code: { type: string }
+              package_options:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    option_name: { type: string }
+                    price: { type: number }
+                    validity: { type: string }
+
+    StorePackageData:
+      type: object
+      properties:
+        family_name: { type: string }
+        variant_name: { type: string }
+        option_name: { type: string }
+        price: { type: number }
+        validity: { type: string }
+        token_confirmation: { type: string }

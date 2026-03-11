@@ -1,0 +1,76 @@
+openapi: 3.0.3
+info:
+  title: Store Controller Documentation
+  version: 1.0.0
+paths:
+  /store/family:
+    post:
+      summary: Package by Family
+      description: Menampilkan daftar produk berdasarkan kode family
+      tags: [Store]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './schemas/store.yaml#/components/schemas/StoreFamilyRequest'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: './schemas/successResponse.yaml'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: './schemas/store.yaml#/components/schemas/StoreFamilyData'
+
+  /store/option-detail:
+    post:
+      summary: Package by Option
+      description: Menampilkan daftar produk berdasarkan kode option
+      tags: [Store]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './schemas/store.yaml#/components/schemas/StorePackageRequest'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: './schemas/successResponse.yaml'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: './schemas/store.yaml#/components/schemas/StorePackageData'
+
+  /store/package-detail:
+    post:
+      summary: Package Details
+      description: Menampilkan detail informasi produk sebelum di order
+      tags: [Store]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './schemas/store.yaml#/components/schemas/StoreDetailRequest'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: './schemas/successResponse.yaml'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: './schemas/store.yaml#/components/schemas/StorePackageData'

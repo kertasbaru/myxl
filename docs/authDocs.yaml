@@ -1,0 +1,95 @@
+openapi: 3.0.3
+info:
+  title: Autentikasi
+  version: 1.0.0
+paths:
+  /auth/request-otp:
+    post:
+      summary: Minta OTP
+      description: Mengirim OTP ke nomor pelanggan.
+      tags: [Authentication]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './schemas/auth.yaml#/components/schemas/AuthRequestOtp'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: './schemas/successResponse.yaml'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        description: "Data OTP (jika ada)"
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: './schemas/errorResponse.yaml'
+
+  /auth/login:
+    post:
+      summary: Login OTP
+      description: Login nomor dengan kode OTP.
+      tags: [Authentication]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './schemas/auth.yaml#/components/schemas/AuthLogin'
+      responses:
+        '200':
+          description: Login Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: './schemas/successResponse.yaml'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: './schemas/auth.yaml#/components/schemas/AuthTokens'
+        '400':
+          description: Invalid OTP
+          content:
+            application/json:
+              schema:
+                $ref: './schemas/errorResponse.yaml'
+
+  /auth/refresh-token:
+    post:
+      summary: Refresh Token
+      description: Perpanjang sesi login menggunakan refresh token di database.
+      tags: [Authentication]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './schemas/auth.yaml#/components/schemas/AuthRefreshToken'
+      responses:
+        '200':
+          description: Refresh Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: './schemas/successResponse.yaml'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: './schemas/auth.yaml#/components/schemas/AuthTokens'
+        '401':
+          description: Session Expired
+          content:
+            application/json:
+              schema:
+                $ref: './schemas/errorResponse.yaml'

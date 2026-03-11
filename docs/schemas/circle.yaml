@@ -1,0 +1,61 @@
+components:
+  schemas:
+    # Request Bodies
+    CircleCommonRequest:
+      type: object
+      required: [msisdn]
+      properties:
+        msisdn:
+          type: string
+          example: "087800001234"
+          description: "Nomor XL"
+
+    CircleActionRequest:
+      type: object
+      required: [msisdn, destination]
+      properties:
+        msisdn: 
+          type: string
+          example: "087800001234"
+          description: "Nomor XL"
+        destination: 
+          type: string
+          example: "087800001234"
+          description: "Nomor XL yang akan di validasi"
+
+    # Response Models
+    CircleStatusData:
+      type: object
+      properties:
+        group_id: { type: string }
+        group_name: { type: string }
+        group_status: { type: string }
+        is_owner: { type: boolean }
+        member_id: { type: string }
+
+    CircleGroupData:
+      type: object
+      properties:
+        group_name: { type: string }
+        members:
+          type: array
+          items:
+            type: object
+            properties:
+              member_name: { type: string }
+              member_role: { type: string }
+              msisdn: { type: string }
+              status: { type: string }
+
+    CircleBonusData:
+      type: object
+      properties:
+        has_spending_tracker_bonus: { type: boolean }
+        bonuses:
+          type: array
+          items:
+            type: object
+            properties:
+              name: { type: string }
+              code: { type: string }
+              status: { type: string }

@@ -1,0 +1,61 @@
+components:
+  schemas:
+    # Model Request Body untuk Request OTP
+    AuthRequestOtp:
+      type: object
+      required:
+        - msisdn
+      properties:
+        msisdn:
+          type: string
+          example: "087800001234"
+          description: "Nomor XL/Axis"
+
+    # Model Request Body untuk Login
+    AuthLogin:
+      type: object
+      required:
+        - msisdn
+        - otp
+      properties:
+        msisdn:
+          type: string
+          example: "087800001234"
+          description: "Nomor XL/Axis"
+        otp:
+          type: string
+          example: "123456"
+          description: "6 digit kode OTP"
+
+    # Model Request Body untuk Refresh Token
+    AuthRefreshToken:
+      type: object
+      required:
+        - msisdn
+      properties:
+        msisdn:
+          type: string
+          example: "087800001234"
+          description: "Nomor XL/Axis"
+
+    # Model Data Token yang dikembalikan saat Login/Refresh
+    AuthTokens:
+      type: object
+      properties:
+        access_token:
+          type: string
+        refresh_token:
+          type: string
+        id_token:
+          type: string
+        expires_in:
+          type: integer
+          example: 3600
+        expires_at:
+          type: integer
+          description: "Timestamp (ms) kapan token hangus"
+        subscriber_id:
+          type: string
+        subscription_type:
+          type: string
+          example: "PREPAID"

@@ -1,0 +1,79 @@
+components:
+  schemas:
+    # Request Bodies
+    FamCommonRequest:
+      type: object
+      required: [msisdn]
+      properties:
+        msisdn:
+          type: string
+          example: "087800001234"
+          description: "Nomor XL"
+
+    FamActionRequest:
+      type: object
+      required: [msisdn, destination]
+      properties:
+        msisdn:
+          type: string
+          example: "087800001234"
+          description: "Nomor XL"
+        destination:
+          type: string
+          example: "087800001234"
+          description: "Nomor XL/Axis/Smartfrend"
+
+    FamAddRequest:
+      type: object
+      required: [msisdn, destination, slot_id, parent_alias]
+      properties:
+        msisdn:
+          type: string
+          example: "087800001234"
+          description: "Nomor XL"
+        destination:
+          type: string
+          example: "087800001234"
+          description: "Nomor XL/Axis/Smartfrend"
+        slot_id:
+          type: number
+          example: 205731
+          description: "Slot ID Member"
+        parent_alias:
+          type: string
+          example: "Rudi"
+          description: "Nama Pengelola"
+
+    FamQuotaRequest:
+      type: object
+      required: [msisdn, destination, quota]
+      properties:
+        msisdn:
+          type: string
+          example: "087800001234"
+          description: "Nomor XL"
+        destination:
+          type: string
+          example: "087800001234"
+          description: "Nomor XL/Axis/Smartfrend"
+        quota: 
+          type: number
+          example: 1
+          description: "Quota dalam GB"
+
+    # Response Models
+    FamDashboardData:
+      type: object
+      properties:
+        msisdn: { type: string }
+        total_quota: { type: number }
+        remaining_quota: { type: number }
+        members:
+          type: array
+          items:
+            type: object
+            properties:
+              alias: { type: string }
+              msisdn: { type: string }
+              quota_allocated: { type: number }
+              quota_used: { type: number }

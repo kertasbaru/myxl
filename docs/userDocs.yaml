@@ -1,0 +1,219 @@
+openapi: 3.0.3
+info:
+  title: User Controller Documentation
+  version: 1.0.0
+paths:
+  /user/balance:
+    post:
+      summary: Detail Pulsa & Masa Aktif
+      description: Menampilkan informasi jumlah pulsa dan masa aktif
+      tags: [User]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './schemas/user.yaml#/components/schemas/UserCommonRequest'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: './schemas/successResponse.yaml'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: './schemas/user.yaml#/components/schemas/UserBalanceData'
+
+  /user/profile:
+    post:
+      summary: Detail Profil
+      description: Menampilkan informasi profil nomor
+      tags: [User]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './schemas/user.yaml#/components/schemas/UserCommonRequest'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: './schemas/successResponse.yaml'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: './schemas/user.yaml#/components/schemas/UserProfileData'
+
+  /user/segments:
+    post:
+      summary: Segments
+      description: Menampilkan notifikasi terlihat dan tersembunyi
+      tags: [User]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './schemas/user.yaml#/components/schemas/UserCommonRequest'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: './schemas/successResponse.yaml'
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: './schemas/user.yaml#/components/schemas/UserNotifItem'
+
+  /user/notifications:
+    post:
+      summary: Semua Notifikasi
+      description: Menampilkan notifikasi yang dapat dilihat
+      tags: [User]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './schemas/user.yaml#/components/schemas/UserCommonRequest'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: './schemas/successResponse.yaml'
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: './schemas/user.yaml#/components/schemas/UserNotifItem'
+
+  /user/read-notification:
+    post:
+      summary: Detail Notifikasi
+      description: Menampilkan detail Notifikasi
+      tags: [User]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './schemas/user.yaml#/components/schemas/UserReadNotifRequest'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: './schemas/successResponse.yaml'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: './schemas/user.yaml#/components/schemas/UserNotifItem'
+
+  /user/packages:
+    post:
+      summary: Detail Paket
+      description: Menampilkan informasi paket yang dimiliki
+      tags: [User]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './schemas/user.yaml#/components/schemas/UserCommonRequest'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: './schemas/successResponse.yaml'
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: './schemas/user.yaml#/components/schemas/UserPackageItem'
+
+  /user/unsub-package:
+    post:
+      summary: Unreg Paket
+      description: Melakukan unregistrasi paket
+      tags: [User]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './schemas/user.yaml#/components/schemas/UserUnsubRequest'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: './schemas/successResponse.yaml'
+
+  /user/lock-info:
+    post:
+      summary: Detail Lock Unlock
+      description: Menampilkan informasi kontrol pulsa
+      tags: [User]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './schemas/user.yaml#/components/schemas/UserCommonRequest'
+      responses:
+        '200':
+          description: Success (Returns boolean)
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: './schemas/successResponse.yaml'
+                  - type: object
+                    properties:
+                      data: { type: boolean }
+
+  /user/lock-set:
+    post:
+      summary: On/Off Lock Unlock
+      description: On/Off kontrol pulsa
+      tags: [User]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './schemas/user.yaml#/components/schemas/UserCommonRequest'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: './schemas/successResponse.yaml'
+                  - type: object
+                    properties:
+                      data: { type: boolean }

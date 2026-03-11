@@ -1,0 +1,63 @@
+components:
+  schemas:
+    # --- Request Bodies ---
+    UserCommonRequest:
+      type: object
+      required: [msisdn]
+      properties:
+        msisdn:
+          type: string
+          example: "087800001234"
+
+    UserReadNotifRequest:
+      type: object
+      required: [msisdn, notification_id]
+      properties:
+        msisdn: { type: string }
+        notification_id: { type: string }
+
+    UserUnsubRequest:
+      type: object
+      required: [msisdn, quota_name]
+      properties:
+        msisdn: { type: string }
+        quota_name: { type: string }
+
+    # --- Response Models ---
+    UserBalanceData:
+      type: object
+      properties:
+        balance: { type: number }
+        expired_at: { type: string }
+        grace_at: { type: string }
+
+    UserProfileData:
+      type: object
+      properties:
+        name: { type: string }
+        msisdn: { type: string }
+        subscriber_id: { type: string }
+        subscription_type: { type: string }
+
+    UserNotifItem:
+      type: object
+      properties:
+        notification_id: { type: string }
+        timestamp: { type: string }
+        is_read: { type: boolean }
+        message: { type: string }
+
+    UserPackageItem:
+      type: object
+      properties:
+        name: { type: string }
+        expired_at: { type: string }
+        quota_code: { type: string }
+        benefits: 
+          type: array
+          items:
+            type: object
+            properties:
+              name: { type: string }
+              remaining: { type: string }
+              total: { type: string }

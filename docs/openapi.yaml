@@ -1,0 +1,10 @@
+openapi: 3.0.3
+info:
+  title: MyXL Unofficial API
+  description: Dokumentasi API MyXL Unofficial.
+  version: 1.1.1
+servers:
+  - url: https://myxlapi.wuzzstore.my.id
+paths: {}
+components:
+  schemas: {}

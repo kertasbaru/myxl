@@ -1,0 +1,78 @@
+components:
+  schemas:
+    # Request Body untuk Cek Payment
+    PurchaseCheckRequest:
+      type: object
+      required:
+        - msisdn
+        - family_code
+        - variant_code
+      properties:
+        msisdn:
+          type: string
+          example: "087744105745"
+        family_code:
+          type: string
+          example: "3b723f46-856e-45dd-aa3a-6c68dd1e9ded"
+        variant_code:
+          type: string
+          example: "c4ed05ea-bda6-48d2-881e-763f21aa7eb2"
+        order:
+          type: number
+          default: 1
+
+    # Request Body untuk Eksekusi Pembelian
+    PurchaseExecRequest:
+      type: object
+      required:
+        - msisdn
+        - family_code
+        - variant_code
+      properties:
+        msisdn:
+          type: string
+          example: "087760204418"
+        family_code:
+          type: string
+          example: "f4fd69c7-12a4-4047-a1f2-f4072a7c543e"
+        variant_code:
+          type: string
+          example: "555a091d-b1eb-43c2-925f-3da485fecf5f"
+        order:
+          type: number
+          default: 19
+          example: 19
+        is_decoy:
+          type: boolean
+          default: false
+          description: "Aktifkan metode pancingan (Decoy/Bypass) untuk paket ini"
+          example: true
+
+    # Output Data Hasil Pembelian
+    PurchaseResultData:
+      type: object
+      properties:
+        transaction_code:
+          type: string
+          example: "TRX-12345678"
+        total_amount:
+          type: integer
+          example: 78000
+        payment_method:
+          type: string
+          example: "BALANCE"
+        status:
+          type: string
+          example: "SUCCESS"
+        items_purchased:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+                example: "Xtra Combo Flex"
+              amount:
+                type: integer
+              status:
+                type: string

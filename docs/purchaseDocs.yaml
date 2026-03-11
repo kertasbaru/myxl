@@ -1,0 +1,78 @@
+paths:
+  /purchase/payment-methods:
+    post:
+      summary: Check Payment Methods
+      tags: [Purchase]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './schemas/purchase.yaml#/components/schemas/PurchaseCheckRequest'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: './schemas/successResponse.yaml'
+
+  /purchase/balance:
+    post:
+      summary: Buy Package (Balance)
+      description: Membeli paket menggunakan pulsa. Set <b>is_decoy=true</b> untuk menggunakan metode pancingan (Bypass).
+      tags: [Purchase]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './schemas/purchase.yaml#/components/schemas/PurchaseExecRequest'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: './schemas/successResponse.yaml'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: './schemas/purchase.yaml#/components/schemas/PurchaseResultData'
+        '400':
+          description: Bad Request / Error
+          content:
+            application/json:
+              schema:
+                $ref: './schemas/errorResponse.yaml'
+
+  /purchase/qris:
+    post:
+      summary: Buy Package (QRIS)
+      description: Membeli paket menggunakan qris. Set <b>is_decoy=true</b> untuk menggunakan metode pancingan (Bypass).
+      tags: [Purchase]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './schemas/purchase.yaml#/components/schemas/PurchaseExecRequest'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: './schemas/successResponse.yaml'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: './schemas/purchase.yaml#/components/schemas/PurchaseResultData'
+        '400':
+          description: Bad Request / Error
+          content:
+            application/json:
+              schema:
+                $ref: './schemas/errorResponse.yaml'
