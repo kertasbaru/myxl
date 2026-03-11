@@ -90,23 +90,23 @@ const getRandomInt = (min, max) => {
 const getJavaLikeTimestamp = (dateInput) => {
   const now = dateInput ? new Date(dateInput) : new Date();
   
-  // Hardcode offset +8 jam (WITA/Singapore/KL Standard) sesuai logic aplikasi asli
-  const offsetHours = 8;
-  const gmt8Time = new Date(now.getTime() + (offsetHours * 60 * 60 * 1000));
+  // Hardcode offset +7 jam (WIB - Western Indonesia Time) sesuai logic aplikasi asli
+  const offsetHours = 7;
+  const gmt7Time = new Date(now.getTime() + (offsetHours * 60 * 60 * 1000));
   
   const pad = (n) => n.toString().padStart(2, '0');
   const pad3 = (n) => n.toString().padStart(3, '0');
 
-  const year = gmt8Time.getUTCFullYear();
-  const month = pad(gmt8Time.getUTCMonth() + 1);
-  const date = pad(gmt8Time.getUTCDate());
-  const hours = pad(gmt8Time.getUTCHours());
-  const minutes = pad(gmt8Time.getUTCMinutes());
-  const seconds = pad(gmt8Time.getUTCSeconds());
+  const year = gmt7Time.getUTCFullYear();
+  const month = pad(gmt7Time.getUTCMonth() + 1);
+  const date = pad(gmt7Time.getUTCDate());
+  const hours = pad(gmt7Time.getUTCHours());
+  const minutes = pad(gmt7Time.getUTCMinutes());
+  const seconds = pad(gmt7Time.getUTCSeconds());
   
-  const ms3 = pad3(gmt8Time.getUTCMilliseconds());
+  const ms3 = pad3(gmt7Time.getUTCMilliseconds());
 
-  return `${year}-${month}-${date}T${hours}:${minutes}:${seconds}.${ms3}+0800`;
+  return `${year}-${month}-${date}T${hours}:${minutes}:${seconds}.${ms3}+0700`;
 };
 
 /**
@@ -206,6 +206,7 @@ const buildEncryptedField = (ivHex16 = null, urlsafeB64 = false) => {
   const pt = Buffer.alloc(blockSize, blockSize); // Padding Block
 
   const cipher = crypto.createCipheriv(getAesAlgo(key), Buffer.from(key, 'ascii'), iv);
+  cipher.setAutoPadding(false); // pt sudah ter-pad manual, jangan double-pad
   
   let encrypted = cipher.update(pt);
   encrypted = Buffer.concat([encrypted, cipher.final()]);

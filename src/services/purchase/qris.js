@@ -23,9 +23,8 @@ const purchaseQris = async (
   timestamp,
   overwriteAmount = -1
 ) => {
-  // Logic 1: Tentukan Target & Amount (Shortened)
-  const target = items.length > 1 ? items[1] : items[0];
-  const amountInt = overwriteAmount === -1 ? target.item_price : overwriteAmount;
+  // Logic 1: Tentukan Amount (QRIS always uses items[0] for original_price)
+  const amountInt = overwriteAmount === -1 ? items[items.length - 1].item_price : overwriteAmount;
   
   // Logic 2: Payment Targets String (Shortened)
   const paymentTargets = items.map(i => i.item_code).join(';');
@@ -45,7 +44,7 @@ const purchaseQris = async (
       is_spend_limit_temporary: false,
       is_switch_plan: false,
       migration_type: "",
-      original_price: target.item_price,
+      original_price: items[0].item_price,
       quota_bonus: 0,
       spend_limit_amount: 0,
       tax: 0

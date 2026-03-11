@@ -1,5 +1,6 @@
 const autoRefresh = require('./autoRefresh');
 const helpers = require('../utils/helpers');
+const logger = require('../utils/logger');
 const responseHelper = require('../utils/responseHelper');
 const purchaseSchema = require('../schemas/purchaseSchema');
 
@@ -14,6 +15,21 @@ const _handleAuth = async (msisdn) => {
   const user = await autoRefresh(helpers.formatNomor(msisdn));
   if (!user) throw new Error("401 - Login required");
   return user;
+};
+
+/**
+ * Helper: Parse amount yang valid dari pesan error "Bizz-err.Amount.Total=XXX"
+ * @param {string} message 
+ * @returns {number|null}
+ */
+const _parseAmountFromError = (message) => {
+  if (!message || !message.includes("Bizz-err.Amount.Total")) return null;
+  try {
+    const parts = message.split("=");
+    return parseInt(parts[1].trim(), 10);
+  } catch (e) {
+    return null;
+  }
 };
 
 const purchaseController = {
@@ -47,7 +63,8 @@ const purchaseController = {
         item_name: targetData.name,
         item_price: targetData.price,
         product_type: "",
-        tax: 0
+        tax: 0,
+        token_confirmation: targetData.token_confirmation || ""
       }];
 
       // Logic Decoy (Setup Awal)
@@ -62,7 +79,8 @@ const purchaseController = {
           item_name: decoyData.name,
           item_price: decoyData.price,
           product_type: "",
-          tax: 0
+          tax: 0,
+          token_confirmation: decoyData.token_confirmation || ""
         });
       }
 
@@ -73,19 +91,25 @@ const purchaseController = {
       );
 
       // Retry Logic (Khusus Decoy + Error Amount)
-      if (purchase.status === 'FAILED' && value.is_decoy && purchase.message.includes("Bizz-err.Amount.Total") || purchase.message.includes("Payment amount is not valid")) {
+      const errorMsg = (purchase.status === 'FAILED' && purchase.message) ? purchase.message : '';
+      if (errorMsg && value.is_decoy && (errorMsg.includes("Bizz-err.Amount.Total") || errorMsg.includes("Payment amount is not valid"))) {
+        // Parse amount yang valid dari pesan error (sesuai logic original Python)
+        const validAmount = _parseAmountFromError(errorMsg);
+
         // Refresh Decoy Token
         const newDecoy = await preparePaymentInfo(user.id_token, decoyConfig.family_code, decoyConfig.variant_code, decoyConfig.order, decoyConfig.is_enterprise, decoyConfig.migration_type);
         
-        // Retry dengan Token Baru & Harga Decoy saja
+        // Retry dengan Token Baru & Amount yang benar
+        const retryAmount = validAmount || newDecoy.price;
+        logger.info(`[PurchaseCtrl] Retrying balance with adjusted amount: ${retryAmount}`);
         purchase = await purchaseBalance(
           user.id_token, user.access_token, items, 
-          newDecoy.token_payment, newDecoy.payment_for, newDecoy.timestamp, newDecoy.price
+          newDecoy.token_payment, newDecoy.payment_for, newDecoy.timestamp, retryAmount
         );
       }
 
       // Final Check
-      if (purchase.status === 'FAILED') return responseHelper.error(res, purchase.message);
+      if (purchase.status === 'FAILED') return responseHelper.error(res, new Error(purchase.message || 'Purchase failed'));
 
       // Mapping Response Sukses
       const detail = purchase.data.details[0];
@@ -119,7 +143,8 @@ const purchaseController = {
         item_name: targetData.name,
         item_price: targetData.price,
         product_type: "",
-        tax: 0
+        tax: 0,
+        token_confirmation: targetData.token_confirmation || ""
       }];
 
       // Logic Decoy (Setup Awal)
@@ -128,13 +153,14 @@ const purchaseController = {
         const decoyData = await preparePaymentInfo(user.id_token, decoyConfig.family_code, decoyConfig.variant_code, decoyConfig.order, decoyConfig.is_enterprise, decoyConfig.migration_type);
         
         activeData = decoyData; // Token & Timestamp pakai punya Decoy
-        totalPrice = decoyData.price;
+        totalPrice += decoyData.price;
         items.push({
           item_code: decoyData.option_code,
           item_name: decoyData.name,
           item_price: decoyData.price,
           product_type: "",
-          tax: 0
+          tax: 0,
+          token_confirmation: decoyData.token_confirmation || ""
         });
       }
 
@@ -145,19 +171,25 @@ const purchaseController = {
       );
 
       // Retry Logic (Khusus Decoy + Error Amount)
-      if (purchase.status === 'FAILED' && value.is_decoy && (purchase.message.includes("Bizz-err.Amount.Total") || purchase.message.includes("Payment amount is not valid"))) {
+      const errorMsg = (purchase.status === 'FAILED' && purchase.message) ? purchase.message : '';
+      if (errorMsg && value.is_decoy && (errorMsg.includes("Bizz-err.Amount.Total") || errorMsg.includes("Payment amount is not valid"))) {
+        // Parse amount yang valid dari pesan error (sesuai logic original Python)
+        const validAmount = _parseAmountFromError(errorMsg);
+
         // Refresh Decoy Token
         const newDecoy = await preparePaymentInfo(user.id_token, decoyConfig.family_code, decoyConfig.variant_code, decoyConfig.order, decoyConfig.is_enterprise, decoyConfig.migration_type);
         
-        // Retry dengan Token Baru & Harga Decoy saja
+        // Retry dengan Token Baru & Amount yang benar
+        const retryAmount = validAmount || newDecoy.price;
+        logger.info(`[PurchaseCtrl] Retrying qris with adjusted amount: ${retryAmount}`);
         purchase = await purchaseQris(
           user.id_token, user.access_token, items, 
-          newDecoy.token_payment, newDecoy.payment_for, newDecoy.timestamp, newDecoy.price
+          newDecoy.token_payment, newDecoy.payment_for, newDecoy.timestamp, retryAmount
         );
       }
 
       // Final Check
-      if (purchase.status === 'FAILED') return responseHelper.error(res, purchase.message);
+      if (purchase.status === 'FAILED') return responseHelper.error(res, new Error(purchase.message || 'Purchase failed'));
       
       // Pending Payment
       const pending = await pendingPayment(user.id_token, purchase.data.transaction_code);

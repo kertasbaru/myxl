@@ -31,8 +31,8 @@ const extendSession = async (subscriberId, axFp) => {
     );
 
     // response dari sendRequestCiam sudah berupa body JSON
-    if (response && response.exchange_code) {
-      return response.exchange_code;
+    if (response && response.data && response.data.exchange_code) {
+      return response.data.exchange_code;
     }
 
     throw new Error("No exchange_code received from extend-session endpoint");
@@ -78,9 +78,9 @@ const refreshToken = async (oldRefreshToken, subscriberId, axFp) => {
     return response;
 
   } catch (error) {
-    // Handling error dari requestClient (throw object { status, data, message })
-    const status = error.status || 500;
-    const errData = error.data || {};
+    // Handling error dari requestClient (Axios error with .response property)
+    const status = error.response?.status || 500;
+    const errData = error.response?.data || {};
     const errDesc = errData.error_description || "";
 
     // Skenario Khusus: Session Mati (400 Bad Request - Session not active)
