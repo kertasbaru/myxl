@@ -73,7 +73,7 @@ const purchaseController = {
       );
 
       // Retry Logic (Khusus Decoy + Error Amount)
-      if (purchase.status === 'FAILED' && value.is_decoy && purchase.message.includes("Bizz-err.Amount.Total") || purchase.message.includes("Payment amount is not valid")) {
+      if (purchase.status === 'FAILED' && value.is_decoy && (purchase.message.includes("Bizz-err.Amount.Total") || purchase.message.includes("Payment amount is not valid"))) {
         // Refresh Decoy Token
         const newDecoy = await preparePaymentInfo(user.id_token, decoyConfig.family_code, decoyConfig.variant_code, decoyConfig.order, decoyConfig.is_enterprise, decoyConfig.migration_type);
         
@@ -85,7 +85,7 @@ const purchaseController = {
       }
 
       // Final Check
-      if (purchase.status === 'FAILED') return responseHelper.error(res, purchase.message);
+      if (purchase.status === 'FAILED') return responseHelper.error(res, new Error(purchase.message));
 
       // Mapping Response Sukses
       const detail = purchase.data.details[0];
@@ -157,7 +157,7 @@ const purchaseController = {
       }
 
       // Final Check
-      if (purchase.status === 'FAILED') return responseHelper.error(res, purchase.message);
+      if (purchase.status === 'FAILED') return responseHelper.error(res, new Error(purchase.message));
       
       // Pending Payment
       const pending = await pendingPayment(user.id_token, purchase.data.transaction_code);

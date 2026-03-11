@@ -5,7 +5,7 @@ const transferValidate = async (idToken, msisdn) => {
   const path = 'api/v8/auth/validate-msisdn';
   const payload = {
     is_enterprise: false,
-    lang: id,
+    lang: 'id',
     msisdn: msisdn,
     with_bizon: false,
     with_enterprise: false,

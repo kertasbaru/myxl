@@ -90,14 +90,7 @@ const userController = {
         throw new Error(`${respon.code} - ${respon.message}`);
       }
       
-      const data = respon.data.notification.data.map((p) => ({
-        notification_id: p.notification_id,
-        timestamp: p.timestamp,
-        is_read: p.is_read,
-        message: p.full_message
-      }));
-      
-      return responseHelper.success(res, data, 'Segments Requested Successfully');
+      return responseHelper.success(res, respon.data, 'Segments Requested Successfully');
 
     } catch (error) {
       return responseHelper.error(res, error);
